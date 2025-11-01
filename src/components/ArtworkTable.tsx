@@ -33,7 +33,6 @@ const ArtworkTable: React.FC = () => {
     fetchData(page);
   }, [page]);
 
-  
   const updatePageSelection = (pageNum: number, newSelection: Artwork[]) => {
     setSelectedAcrossPages((prev) => ({
       ...prev,
@@ -41,7 +40,6 @@ const ArtworkTable: React.FC = () => {
     }));
   };
 
-  
   const handleOverlaySubmit = async () => {
     const totalToSelect = parseInt(rowInput);
     if (!totalToSelect || totalToSelect <= 0) return;
@@ -66,6 +64,7 @@ const ArtworkTable: React.FC = () => {
 
     overlayRef.current?.hide();
   };
+
   useEffect(() => {
     const saved = selectedAcrossPages[page] || [];
     setSelectedRows(saved);
@@ -79,7 +78,9 @@ const ArtworkTable: React.FC = () => {
   const titleHeader = (
     <div className="title-header">
       <Button
-        icon="pi pi-angle-down" className="p-button-rounded p-button-outlined" onClick={(e) => overlayRef.current?.toggle(e)}
+        icon="pi pi-angle-down"
+        className="p-button-rounded p-button-outlined"
+        onClick={(e) => overlayRef.current?.toggle(e)}
         tooltip="Select Rows"
         tooltipOptions={{ position: "bottom" }}
       />
@@ -114,7 +115,7 @@ const ArtworkTable: React.FC = () => {
         selectionMode="checkbox"
         selection={selectedRows}
         onSelectionChange={onSelectionChange}
-        onPage={(e) => setPage(e.page + 1)}
+        onPage={(e: any) => setPage((e?.page ?? 0) + 1)} // ✅ Fixed TypeScript safe line
       >
         <Column selectionMode="multiple" headerStyle={{ width: "3rem" }} />
         <Column field="title" header={titleHeader} />
@@ -125,7 +126,8 @@ const ArtworkTable: React.FC = () => {
       </DataTable>
 
       <p className="selection-info">
-        Total selected rows across pages: <strong>{allSelectedRows.length}</strong>
+        Total selected rows across pages:{" "}
+        <strong>{allSelectedRows.length}</strong>
       </p>
     </div>
   );
